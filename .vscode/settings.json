@@ -9,11 +9,11 @@
             "server": "localhost",
             "port": 33060,
             "driver": "MySQL",
-            "name": "MySQL Local",
+            "name": "DATABASE",
             "database": "employeelist",
             "username": "root",
             "password": "5667Tysm!!@@",
-            "connectionTimeout": 30
+            "connectionTimeout": 100
         }
     ]
 }
