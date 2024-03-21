@@ -19,6 +19,7 @@ CREATE TABLE Employee (
     Employee_ID VARCHAR(255) PRIMARY KEY,
     First_Name VARCHAR(255),
     Last_Name VARCHAR(255),
+    Emp_Password VARCHAR(255) NOT NULL,
     NRIC_No VARCHAR(9),
     DOB DATE,
     Residential_Address VARCHAR(255),
