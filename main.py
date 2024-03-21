@@ -1,71 +1,40 @@
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 
+# Function to connect to MySQL database
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="5667Tysm!!@@",
+    database="employeelist")
+
+conn = mydb.cursor()
+
 app = Flask(__name__)
 
-# Function to connect to MySQL database
-def mysqldatabase():
-    try:
-        conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="5667Tysm!!@@",
-            database="EMPLOYEELIST"
-        )
-        return conn
-    except mysql.connector.Error as err:
-        print("Error connecting to database:", err)
-        return None
-
-# Function to validate username and password
-def validate_user(conn, username, password):
-    cursor = conn.cursor()
-    query = "SELECT * FROM Employee WHERE Employee_ID = %s AND Emp_Password = %s"
-    cursor.execute(query, (username, password))
-    user = cursor.fetchone()
-    cursor.close()
-    if user:
-        return True
-    else:
-        return False
-
-# Login route
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/")
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        conn = mysqldatabase()
-        if conn:
-            if validate_user(conn, username, password):
-                # Redirect to employee dashboard or any other page after successful login
-                return redirect(url_for('dashboard'))
-            else:
-                error = "Invalid username or password."
-                return render_template('login.html', error=error)
-        else:
-            error = "Failed to connect to the database."
-            return render_template('login.html', error=error)
-    return render_template('login.html')
+    try:
+        return render_template("login.html")
+    except Exception as e:
+        return f"Error rendering login template: {e}"
 
-# Route for employee dashboard
-@app.route('/dashboard')
-def dashboard():
-    conn = mysqldatabase()
-    if conn:
-        cursor = conn.cursor()
-        query = "SELECT * FROM Employee WHERE Employee_ID = %s"
-        cursor.execute(query, ('123',))  # Assuming '123' is a sample employee ID, replace with actual logged in user's ID
-        employee = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        if employee:
-            # Render dashboard with employee details
-            return render_template('dashboard.html', employee=employee)
-        else:
-            return "Employee not found."
-    else:
-        return "Failed to connect to the database."
+# Route for adding department
+@app.route('/Department/', methods=['GET', 'POST'])
+def add_department():
+    success_message = None
+    if request.method == 'POST':
+        department_id = request.form['department_id']
+        department_name = request.form['department_name']
+        
+        query = "INSERT INTO Department (Department_ID, Department_Name) VALUES (%s, %s)"
+        val = [(department_id, department_name)]
+        conn.executemany(query, val)
+        mydb.commit()  # Commit changes to the database
+        success_message = "Department added successfully."
+        print(conn.rowcount, "was inserted.")
+    return render_template("Department.html", success_message=success_message)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

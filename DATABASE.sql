@@ -1,6 +1,8 @@
 show DATABASES;
 USE EMPLOYEELIST;
 
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '5667Tysm!!@@';
+
 
 CREATE TABLE Department (
     Department_ID VARCHAR(255) PRIMARY KEY,
@@ -98,3 +100,7 @@ DROP TABLE IF EXISTS LeaveCount;
 DROP TABLE IF EXISTS Commission;
 DROP TABLE IF EXISTS Vehicle;
 DROP TABLE IF EXISTS Employee;
+
+SELECT * FROM Department;
+
+DELETE FROM Department where Department_ID = 'D005';
